@@ -1,0 +1,12 @@
+{
+    "Setting Edit": {
+        "command": "notepad",
+        "params": "sg_launcher_config.json",
+        "description": "コマンド設定を編集"
+    },
+    "dir list": {
+        "command": "cmd.exe /c dir",
+        "params": "",
+        "description": "ディレクトリリスト"
+    }
+}
