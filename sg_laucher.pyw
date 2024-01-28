@@ -68,7 +68,7 @@ command_body_column = sg.Column([
 ])
 
 params_column = sg.Column([
-    [sg.Text('パラメーター:', size=(12, 1)), sg.InputText(initial_command_params,key='-PARAMS-', readonly=True, size=(25, 1))]
+    [sg.Text('パラメーター:', size=(12, 1)), sg.InputText(initial_command_params,key='-PARAMS-', size=(25, 1))]
 ])
 
 
@@ -99,6 +99,9 @@ while True:
         window['-COMMAND_BODY-'].update(selected_command['command'])
         window['-PARAMS-'].update(selected_command['params'])
         window['-DESCRIPTION-'].update(selected_command['description'])
+        params_allow_input = selected_command.get('params_allow_input', True)  # デフォルトはTrue
+        print(params_allow_input)
+        window['-PARAMS-'].update(disabled=not params_allow_input)        
 
     if event == '-START-':
         # 開始ボタン: 無効, 停止ボタン: 有効
@@ -106,10 +109,11 @@ while True:
         window['-STOP-'].update(disabled=False)        
         selected_command_name = values['-COMMAND-']
         selected_command = commands_details[selected_command_name]['command']
-        selected_params = commands_details[selected_command_name]['params']
+        user_params = values['-PARAMS-']  # ユーザーが入力したパラメータ
         should_wait = commands_details[selected_command_name].get('wait', True)  # waitキーがなければTrueをデフォルト値とする
+        # 'params_allow_input' に基づいてパラメータ入力フィールドの有効/無効を切り替える
         # スレッドを開始する
-        threading.Thread(target=run_command, args=(selected_command, selected_params, window,should_wait), daemon=True).start()
+        threading.Thread(target=run_command, args=(selected_command, user_params, window,should_wait), daemon=True).start()
         window['-OUTPUT-'].update(f'コマンドを投入しました{selected_command_name}....\n')
 
     elif event == '-STOP-':

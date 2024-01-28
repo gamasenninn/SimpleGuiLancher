@@ -7,6 +7,7 @@
     "Setting Edit": {
         "command": "notepad",
         "params": "sg_launcher_config.json",
+        "params_allow_input": false,
         "description": "コマンド設定を編集",
         "wait": false
     }
