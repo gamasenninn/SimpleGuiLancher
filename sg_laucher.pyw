@@ -16,7 +16,7 @@ def load_commands(filename):
 commands_details = load_commands('sg_launcher_config.json')
 
 # コマンドを非同期で実行する関数
-def run_command(command, parameters, window):
+def run_command(command, parameters, window,wait_sw=True):
     global stop_thread
     try:
         env = os.environ.copy()
@@ -24,22 +24,23 @@ def run_command(command, parameters, window):
         command_list = command.split() + parameters.split()
         process = subprocess.Popen(command_list, stdout=subprocess.PIPE, stderr=subprocess.PIPE,  text=True, bufsize=1, universal_newlines=True,env=env)
 
-        while True:
-            if stop_thread:
-                process.terminate()
-                window.write_event_value('-THREAD_STOPPED-', 'スレッドが停止しました')
-                stop_thread = False
-                break
-            output = process.stdout.readline()
-            if output:
-                print(output,end='' )
-                window.write_event_value('-COMMAND_OUTPUT-', output.strip())
-            elif process.poll() is not None:
-                break
-            error = process.stderr.read()
-            if error:
-                print(error)
-                window.write_event_value('-COMMAND_ERROR-', error)
+        if wait_sw:
+            while True:
+                if stop_thread:
+                    process.terminate()
+                    window.write_event_value('-THREAD_STOPPED-', 'スレッドが停止しました')
+                    stop_thread = False
+                    break
+                output = process.stdout.readline()
+                if output:
+                    print(output,end='' )
+                    window.write_event_value('-COMMAND_OUTPUT-', output.strip())
+                elif process.poll() is not None:
+                    break
+                error = process.stderr.read()
+                if error:
+                    print(error)
+                    window.write_event_value('-COMMAND_ERROR-', error)
 
 
     except Exception as e:
@@ -106,8 +107,9 @@ while True:
         selected_command_name = values['-COMMAND-']
         selected_command = commands_details[selected_command_name]['command']
         selected_params = commands_details[selected_command_name]['params']
+        should_wait = commands_details[selected_command_name].get('wait', True)  # waitキーがなければTrueをデフォルト値とする
         # スレッドを開始する
-        threading.Thread(target=run_command, args=(selected_command, selected_params, window), daemon=True).start()
+        threading.Thread(target=run_command, args=(selected_command, selected_params, window,should_wait), daemon=True).start()
         window['-OUTPUT-'].update(f'コマンドを投入しました{selected_command_name}....\n')
 
     elif event == '-STOP-':
