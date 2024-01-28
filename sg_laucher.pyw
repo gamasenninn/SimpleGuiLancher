@@ -62,15 +62,12 @@ initial_command_description = initial_command['description']
 command_column = sg.Column([
     [sg.Text('コマンド:', size=(12, 1)), sg.Combo(list(commands_details.keys()), default_value=list(commands_details.keys())[0], key='-COMMAND-', readonly=True,enable_events=True)]
 ])
-
 command_body_column = sg.Column([
     [sg.Text('コマンド実体:', size=(12, 1)), sg.InputText(initial_command_body,key='-COMMAND_BODY-', readonly=True, size=(25, 1))]
 ])
-
 params_column = sg.Column([
     [sg.Text('パラメーター:', size=(12, 1)), sg.InputText(initial_command_params,key='-PARAMS-', size=(25, 1))]
 ])
-
 
 layout = [
     [command_column],
