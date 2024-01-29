@@ -9,6 +9,11 @@
         "params": "",
         "description": "test"
     },
+    "random_message_error": {
+        "command": "python random_message_err.py",
+        "params": "",
+        "description": "test"
+    },
     "Setting Edit": {
         "command": "notepad",
         "params": "sg_launcher_config.json",

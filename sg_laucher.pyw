@@ -35,12 +35,15 @@ def run_command(command, parameters, window,wait_sw=True):
                 if output:
                     print(output,end='' )
                     window.write_event_value('-COMMAND_OUTPUT-', output.strip())
+                
                 elif process.poll() is not None:
-                    break
-                #error = process.stderr.readline()
-                #if error:
-                #    print(error)
-                #    window.write_event_value('-COMMAND_ERROR-', error)
+                    error = process.stderr.read()
+                    if error:
+                        print("エラー内容",error)
+                        window.write_event_value('-COMMAND_ERROR-', error)
+                        raise Exception("呼出先でエラーです。")
+                    elif process.poll() is not None:
+                        break
 
 
     except Exception as e:
