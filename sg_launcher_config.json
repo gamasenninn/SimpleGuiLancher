@@ -4,6 +4,11 @@
         "params": "",
         "description": "ディレクトリリスト"
     },
+    "random_message": {
+        "command": "python random_message.py",
+        "params": "",
+        "description": "test"
+    },
     "Setting Edit": {
         "command": "notepad",
         "params": "sg_launcher_config.json",

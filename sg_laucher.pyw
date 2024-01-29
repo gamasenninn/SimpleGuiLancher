@@ -37,10 +37,10 @@ def run_command(command, parameters, window,wait_sw=True):
                     window.write_event_value('-COMMAND_OUTPUT-', output.strip())
                 elif process.poll() is not None:
                     break
-                error = process.stderr.read()
-                if error:
-                    print(error)
-                    window.write_event_value('-COMMAND_ERROR-', error)
+                #error = process.stderr.readline()
+                #if error:
+                #    print(error)
+                #    window.write_event_value('-COMMAND_ERROR-', error)
 
 
     except Exception as e:
@@ -66,7 +66,7 @@ command_body_column = sg.Column([
     [sg.Text('コマンド実体:', size=(12, 1)), sg.InputText(initial_command_body,key='-COMMAND_BODY-', readonly=True, size=(25, 1))]
 ])
 params_column = sg.Column([
-    [sg.Text('パラメーター:', size=(12, 1)), sg.InputText(initial_command_params,key='-PARAMS-', size=(25, 1))]
+    [sg.Text('パラメーター:', size=(12, 1)), sg.Multiline(initial_command_params,key='-PARAMS-', size=(50, 3))]
 ])
 
 layout = [
